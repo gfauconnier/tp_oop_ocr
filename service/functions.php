@@ -2,7 +2,7 @@
 
 function loadClasses($classname)
 {
-    require 'service/'.$classname.'.php';
+    require 'entities/'.$classname.'.php';
 }
 
 spl_autoload_register('loadClasses');

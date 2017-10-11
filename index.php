@@ -1,6 +1,6 @@
 <?php
-require 'class.php';
-require 'functions.php';
+require 'model/data.php';
+require 'service/functions.php';
 ?>
 
 <!doctype html>
@@ -24,8 +24,8 @@ require 'functions.php';
   <form class="" action="" method="post">
       <p>
         Nom : <input type="text" name="nom" maxlength="50" />
-        <input type="submit" value="Créer ce personnage" name="creer" />
-        <input type="submit" value="Utiliser ce personnage" name="utiliser" />
+        <input type="submit" value="Créer ce personnage" name="Creer" />
+        <input type="submit" value="Utiliser ce personnage" name="Utiliser" />
       </p>
   </form>
 

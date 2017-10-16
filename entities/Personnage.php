@@ -52,17 +52,13 @@ class Personnage
     }
 
     //getters
-    public function getId()
+
+    public function __get($value)
     {
-        return $this->_id;
-    }
-    public function getNom()
-    {
-        return $this->_nom;
-    }
-    public function getDegats()
-    {
-        return $this->_degats;
+      $value = '_'.$value;
+        if (isset($this->$value)) {
+            return $this->$value;
+        }
     }
 
     //methods
@@ -70,7 +66,7 @@ class Personnage
     // takes a Personnage as parameter and calls takeDamage of it
     public function frapperPerso(Personnage $perso)
     {
-        if ($perso->getNom() != $this->getNom()) {
+        if ($perso->__get('nom') != $this->__get('nom')) {
             return $perso->takeDamage();
         } else {
             return self::PERSO_SELFATK;
@@ -80,12 +76,11 @@ class Personnage
     // adds degats to this object
     public function takeDamage()
     {
-      $this->_degats += 50;
-      if ($this->_degats < 100) {
-          return self::PERSO_ATK;
-      } else {
-          return self::PERSO_MORT;
-      }
+        $this->_degats += 50;
+        if ($this->_degats < 100) {
+            return self::PERSO_ATK;
+        } else {
+            return self::PERSO_MORT;
+        }
     }
-
 }

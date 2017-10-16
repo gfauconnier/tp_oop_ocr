@@ -4,16 +4,24 @@ class PersoManager
 {
     private $_db;
 
-    // construct
+    // constructor just calls connection to database
     public function __construct($db)
     {
         $this->setDb($db);
     }
 
+    //setters
+    public function setDb(PDO $db)
+    {
+      $this->_db = $db;
+    }
+
     //methods
+
+    // checks if a Personnage exists - id or name are sent thus type of $val is checked before the query
     public function persoExists($val)
     {
-        $selector = is_numeric($val) ? 'id' : 'nom';
+        $selector = $this->val_type($val);
         $query = $this->_db->prepare('SELECT id, nom, degats FROM personnages WHERE '.$selector.' = :val');
         $query->execute(array('val'=>$val));
         $data = $query->fetch();
@@ -24,9 +32,10 @@ class PersoManager
         }
     }
 
+    // returns one Personnage if he exists (depending on name or id -> $val) and creates a new Personnage instance
     public function getPerso($val)
     {
-        $selector = is_numeric($val) ? 'id' : 'nom';
+        $selector = $this->val_type($val);
         if ($this->persoExists($val)) {
             $query = $this->_db->prepare('SELECT id, nom, degats FROM personnages WHERE '.$selector.' = :val');
             $query->execute(array('val'=>$val));
@@ -36,6 +45,7 @@ class PersoManager
         return false;
     }
 
+    // returns a list of all created characters
     public function getAllPersos()
     {
       $persos = [];
@@ -47,6 +57,7 @@ class PersoManager
       return $persos;
     }
 
+    // inserts a new character in databse if it doesn't exist yet
     public function addPerso($nom)
     {
         if (!$this->persoExists($nom)) {
@@ -58,21 +69,23 @@ class PersoManager
         return false;
     }
 
+    // changes the value of the character's degats in the database
     public function updatePerso(Personnage $perso)
     {
         $query = $this->_db->prepare('UPDATE personnages SET nom = :nom, degats = :degats WHERE id = :id');
         $query->execute(array('id'=>$perso->getId(),'nom'=>$perso->getNom(), 'degats'=>$perso->getDegats()));
     }
 
+    // removes the character from the database
     public function deletePerso($id)
     {
         $query = $this->_db->prepare('DELETE FROM personnages WHERE id = ?');
         $query->execute(array($id));
     }
 
-    //setters
-    public function setDb(PDO $db)
+    // returns the 'type' of sent value
+    public function val_type($value)
     {
-        $this->_db = $db;
+      return is_numeric($value) ? 'id' : 'nom';
     }
 }

@@ -16,6 +16,7 @@ class Personnage
         $this->hydrate($donnees);
     }
 
+    // hydrates the object
     public function hydrate(array $donnees)
     {
         foreach ($donnees as $key => $value) {
@@ -66,6 +67,7 @@ class Personnage
 
     //methods
 
+    // takes a Personnage as parameter and calls takeDamage of it
     public function frapperPerso(Personnage $perso)
     {
         if ($perso->getNom() != $this->getNom()) {
@@ -75,6 +77,7 @@ class Personnage
         }
     }
 
+    // adds degats to this object
     public function takeDamage()
     {
       $this->_degats += 50;

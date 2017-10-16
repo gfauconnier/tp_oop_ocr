@@ -6,6 +6,10 @@ class Personnage
     private $_nom;
     private $_degats;
 
+    const PERSO_SELFATK = 1;
+    const PERSO_MORT = 2;
+    const PERSO_ATK = 3;
+
     // constructor
     public function __construct(array $donnees)
     {
@@ -47,15 +51,15 @@ class Personnage
     }
 
     //getters
-    public function id()
+    public function getId()
     {
         return $this->_id;
     }
-    public function nom()
+    public function getNom()
     {
         return $this->_nom;
     }
-    public function degats()
+    public function getDegats()
     {
         return $this->_degats;
     }
@@ -64,21 +68,20 @@ class Personnage
 
     public function frapperPerso(Personnage $perso)
     {
-        if ($perso->nom() != $this->nom()) {
+        if ($perso->getNom() != $this->getNom()) {
             return $perso->takeDamage();
         } else {
-            echo 'Vous ne pouvez pas vous frapper vous-même...';
+            return self::PERSO_SELFATK;
         }
     }
 
     public function takeDamage()
     {
-      $degats = $perso->degats() + 5;
-      if ($degats < 100) {
-          $perso->setDegats($degats);
-          echo $perso->nom().' a subi 5 nouveaux dégats pour un total de '.$perso->degats();
+      $this->_degats += 50;
+      if ($this->_degats < 100) {
+          return self::PERSO_ATK;
       } else {
-          echo $perso->nom().' est mortellement touché.';
+          return self::PERSO_MORT;
       }
     }
 

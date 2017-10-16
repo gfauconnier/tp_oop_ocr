@@ -11,10 +11,11 @@ class PersoManager
     }
 
     //methods
-    public function persoExists($nom)
+    public function persoExists($val)
     {
-        $query = $this->_db->prepare('SELECT id, nom, degats FROM personnages WHERE nom = :nom');
-        $query->execute(array('nom'=>$nom));
+        $selector = is_numeric($val) ? 'id' : 'nom';
+        $query = $this->_db->prepare('SELECT id, nom, degats FROM personnages WHERE '.$selector.' = :val');
+        $query->execute(array('val'=>$val));
         $data = $query->fetch();
         if ($data) {
             return true;
@@ -23,31 +24,44 @@ class PersoManager
         }
     }
 
-    public function getPerso($nom)
+    public function getPerso($val)
     {
-        if ($this->persoExists($nom)) {
-            $query = $this->_db->prepare('SELECT id, nom, degats FROM personnages WHERE nom = :nom');
-            $query->execute(array('nom'=>$nom));
+        $selector = is_numeric($val) ? 'id' : 'nom';
+        if ($this->persoExists($val)) {
+            $query = $this->_db->prepare('SELECT id, nom, degats FROM personnages WHERE '.$selector.' = :val');
+            $query->execute(array('val'=>$val));
             $data = $query->fetch();
             return new Personnage($data);
         }
         return false;
     }
 
-    public function addPerso(Personnage $perso)
+    public function getAllPersos()
     {
-        if (!$this->persoExists($perso->nom())) {
-            $query = $this->_db->prepare('INSERT INTO personnages(nom, degats) VALUES(:nom, :degats)');
-            $query->execute(array('nom'=>$perso->nom(), 'degats'=>$perso->degats()));
-            return $perso->nom().' créé.';
+      $persos = [];
+      $query = $this->_db->query('SELECT id, nom, degats FROM personnages');
+      $data = $query->fetchAll();
+      foreach ($data as $value) {
+        $persos[] = new Personnage($value);
+      }
+      return $persos;
+    }
+
+    public function addPerso($nom)
+    {
+        if (!$this->persoExists($nom)) {
+            $query = $this->_db->prepare('INSERT INTO personnages(nom, degats) VALUES(:nom, 0)');
+            $query->execute(array('nom'=>$nom));
+            $perso = $this->getPerso($nom);
+            return $perso->getNom().' créé.';
         }
-        return $perso->nom().' existe déjà.';
+        return false;
     }
 
     public function updatePerso(Personnage $perso)
     {
         $query = $this->_db->prepare('UPDATE personnages SET nom = :nom, degats = :degats WHERE id = :id');
-        $query->execute(array('id'=>$perso->id(),'nom'=>$perso->nom(), 'degats'=>$perso->degats()));
+        $query->execute(array('id'=>$perso->getId(),'nom'=>$perso->getNom(), 'degats'=>$perso->getDegats()));
     }
 
     public function deletePerso($id)

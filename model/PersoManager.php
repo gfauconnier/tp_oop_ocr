@@ -64,7 +64,7 @@ class PersoManager
             $query = $this->_db->prepare('INSERT INTO personnages(nom, degats) VALUES(:nom, 0)');
             $query->execute(array('nom'=>$nom));
             $perso = $this->getPerso($nom);
-            return $perso->__get('nom').' créé.';
+            return $perso->nom.' créé.';
         }
         return false;
     }
@@ -73,7 +73,7 @@ class PersoManager
     public function updatePerso(Personnage $perso)
     {
         $query = $this->_db->prepare('UPDATE personnages SET nom = :nom, degats = :degats WHERE id = :id');
-        $query->execute(array('id'=>$perso->__get('id'),'nom'=>$perso->__get('nom'), 'degats'=>$perso->__get('degats')));
+        $query->execute(array('id'=>$perso->id,'nom'=>$perso->nom, 'degats'=>$perso->degats));
     }
 
     // removes the character from the database

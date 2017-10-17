@@ -19,12 +19,12 @@ if (isset($_POST['Changer'])) {
         $_SESSION['message'] = 'Vous attaquer vous-meme n\'est pas productif';
         break;
       case Personnage::PERSO_MORT:
-        $_SESSION['message'] = 'Vous avez tué '.$perso_atk->getNom();
-        $manager->deletePerso($perso_atk->getId());
+        $_SESSION['message'] = 'Vous avez tué '.$perso_atk->__get('nom');
+        $manager->deletePerso($perso_atk->__get('id'));
         break;
       case Personnage::PERSO_ATK:
-        $_SESSION['message'] = 'Vous avez attaqué '.$perso_atk->getNom().' pour 50 dégats<br>';
-        $_SESSION['message'] .= $perso_atk->getNom().' a subi '.$perso_atk->getDegats().' dégats au total.';
+        $_SESSION['message'] = 'Vous avez attaqué '.$perso_atk->__get('nom').' pour 50 dégats<br>';
+        $_SESSION['message'] .= $perso_atk->__get('nom').' a subi '.$perso_atk->__get('degats').' dégats au total.';
         $manager->updatePerso($perso_atk);
         break;
     }
@@ -37,7 +37,7 @@ if (isset($_POST['Changer'])) {
         if (isset($_POST['Creer'])) {
             if ($manager->addPerso($nom)) {
                 $perso = $manager->getPerso($nom);
-                $_SESSION['message'] = $perso->getNom().' a été créé';
+                $_SESSION['message'] = $perso->__get('nom').' a été créé';
             } else {
                 $_SESSION['message'] = $nom.' existe déjà.';
             }

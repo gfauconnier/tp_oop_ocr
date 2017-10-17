@@ -28,7 +28,7 @@ class Personnage
     }
 
     // setters
-    public function setId($id)
+    public function setId(int $id)
     {
         $id = (int) $id;
         if ($id > 0) {
@@ -43,7 +43,7 @@ class Personnage
         }
     }
 
-    public function setDegats($degats)
+    public function setDegats(int $degats)
     {
         $degats = (int) $degats;
         if ($degats >= 0 && $degats <= 100) {

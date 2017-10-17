@@ -10,7 +10,7 @@ if (isset($_SESSION['perso'])) {
   <form class="" action="" method="post">
     <input type="submit" value="Changer de perso" name="Changer" class="btn"/>
   </form>
-  <p><?php echo $perso->getNom(); ?> est selectionné et a déjà subi <?php echo $perso->getDegats(); ?> dégats.</p>
+  <p><?php echo $perso->__get('nom'); ?> est selectionné et a déjà subi <?php echo $perso->__get('degats'); ?> dégats.</p>
   <p>Choisissez qui attaquer : </p>
   <?php
   if (count($persos) > 1) {
@@ -21,7 +21,7 @@ if (isset($_SESSION['perso'])) {
   <?php
       foreach ($persos as $personnage) {
       ?>
-    <option value="<?php echo $personnage->getId(); ?>"><?php echo $personnage->getNom(); ?></option>
+    <option value="<?php echo $personnage->__get('id'); ?>"><?php echo $personnage->__get('nom'); ?></option>
     <?php
       }
      ?>
